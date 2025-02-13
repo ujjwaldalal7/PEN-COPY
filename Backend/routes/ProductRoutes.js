@@ -4,7 +4,7 @@ import { adminAuth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/create", adminAuth, createProduct);
+router.post("/create", createProduct);
 router.get("/", getProducts); 
 router.delete("/:id", adminAuth, deleteProduct);
 
