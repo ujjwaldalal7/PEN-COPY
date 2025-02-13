@@ -30,15 +30,15 @@ function App() {
       {/* Admin Protected Routes */}
       <Route
         path="/admin/dashboard"
-        element={isAdmin ? <Dashboard /> : <Navigate to="/admin/unauthorized" />}
+        element={isAdmin ? <Dashboard /> : <div>Unauthorized Access</div>}
       />
       <Route
         path="/admin/products"
-        element={isAdmin ? <AdminProducts /> : <Navigate to="/admin/unauthorized" />}
+        element={isAdmin ? <AdminProducts /> : <div>Unauthorized Access</div>}
       />
       <Route
         path="/admin/products/create"
-        element={isAdmin ? <CreateProduct /> : <Navigate to="/admin/unauthorized" />}
+        element={isAdmin ? <CreateProduct /> : <div>Unauthorized Access</div>}
       />
 
       <Route path="/admin/unauthorized" element={<Unauthorized />} />
