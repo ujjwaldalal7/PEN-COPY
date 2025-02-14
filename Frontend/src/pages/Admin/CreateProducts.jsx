@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "../../components/TextField";
 import Header_navbar from "../../components/Header_navbar";
-import Footer from "../../components/footer";
+import Footer from "../../components/Footer";
 
 const CreateProduct = () => {
   const [product, setProduct] = useState({

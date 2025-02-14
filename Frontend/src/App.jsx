@@ -24,7 +24,7 @@ function App() {
       {/* Protected Routes */}
       <Route
         path="/userdashboard"
-        element={isLoggedIn ? <UserDashboard /> : <Navigate to="/login" />}
+        element={isLoggedIn ? <UserDashboard /> : <div>Please Login</div>}
       />
 
       {/* Admin Protected Routes */}
