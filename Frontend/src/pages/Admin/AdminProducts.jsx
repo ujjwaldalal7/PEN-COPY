@@ -70,7 +70,7 @@ const AdminProducts = () => {
               {products.map((product) => (
                 <tr key={product._id} className="border-t">
                   <td className="py-2 px-4">{product.name}</td>
-                  <td className="py-2 px-4">${product.price}</td>
+                  <td className="py-2 px-4">₹{product.price}</td>
                   <td className="py-2 px-4">{product.stock}</td>
                   <td className="py-2 px-4">
                     <button

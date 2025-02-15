@@ -28,10 +28,9 @@ const Home = () => {
   return (
     <div>
       <HeaderNavbar />
-      <h1 className="text-3xl text-blue-700 text-center my-4">HOME PAGE</h1>
 
       <pre className="text-center">
-        {isLoggedIn ? "Hello, Welcome Back!" : "Please Log in"}
+        {!isLoggedIn ? "Please Log in to continue shopping":""}
       </pre>
 
       <div className="container mx-auto p-4">
