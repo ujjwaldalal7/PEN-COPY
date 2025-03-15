@@ -8,7 +8,8 @@ import Dashboard from "./pages/Admin/Dashboard";
 import AdminProducts from "./pages/Admin/AdminProducts";
 import CreateProduct from "./pages/Admin/CreateProducts";
 import Unauthorized from "./pages/Admin/Unauthorized";
-
+import ProductDetails from "./components/ProductDetails";
+import Cart from "./pages/Cart";
 function App() {
   const { isLoggedIn, isAdmin, isAuthChecked } = useAuth();
 
@@ -20,7 +21,8 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<LoginForm />} />
-
+      <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/cart" element={<Cart />} />
       {/* Protected Routes */}
       <Route
         path="/userdashboard"

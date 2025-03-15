@@ -22,15 +22,17 @@ const AdminProducts = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, []); 
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
   
     try {
-      const response = await fetch(`http://localhost:5500/api/v1/products/${id}`, {
+      const token=localStorage.getItem("token")
+      const response = await fetch(`http://localhost:5500/api/v1/products/delete/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {  Authorization: `${token}`,
+        "Content-Type": "application/json" },
       });
   
       const data = await response.json();
