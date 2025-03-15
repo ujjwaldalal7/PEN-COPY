@@ -5,6 +5,9 @@ import morgan from 'morgan';
 import authRoutes from './routes/authRoute.js';
 import cors from 'cors'
 import ProductRoutes from './routes/ProductRoutes.js '
+import cartRoutes from './routes/cartRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
+
 dotenv.config(); // Load environment variables
 connectDB();
 
@@ -24,6 +27,8 @@ app.use(cors({
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products',ProductRoutes);
+app.use('/api/v1/cart',cartRoutes);
+app.use('/api/v1/orders',orderRoutes);
 
 // Root route
 app.get('/', function (req, res) {
