@@ -1,72 +1,52 @@
 import express from "express";
-import Order from "../models/orderModel.js";
 import Cart from "../models/cartModel.js";
-
+import Order from "../models/orderModel.js";
+import {getAllOrders} from "../controllers/orderConroller.js"
 const router = express.Router();
 
-// Place an order (checkout)
-router.post("/place-order", async (req, res) => {
-  const { userId } = req.body;
+// Place an order from cart
+router.post("/:userId", async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId }).populate("items.productId");
-
-    if (!cart || cart.items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty" });
-    }
-
-    const totalAmount = cart.items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
+    const cart = await Cart.findOne({ userId: req.params.userId });
+    if (!cart || cart.items.length === 0) return res.status(400).json({ error: "Cart is empty" });
 
     const newOrder = new Order({
-      userId,
+      userId: cart.userId,
       items: cart.items,
-      totalAmount,
     });
 
     await newOrder.save();
-    await Cart.findOneAndDelete({ userId });
+    await Cart.findOneAndDelete({ userId: req.params.userId }); // Clear cart after order
 
-    res.json({ message: "Order placed successfully", order: newOrder });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.json(newOrder);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// Get user's orders
+router.get("/all", getAllOrders);
+// Get all orders for a user
 router.get("/:userId", async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
+    const orders = await Order.find({ userId: req.params.userId });
     res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// Get all orders (Admin)
-router.get("/all", async (req, res) => {
-  try {
-    const orders = await Order.find().populate("userId", "name email").sort({ createdAt: -1 });
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Update order status (Admin)
-router.put("/update/:orderId", async (req, res) => {
-  const { status } = req.body;
-
-  if (!["Ordered", "In Transit", "Out for Delivery", "Delivered"].includes(status)) {
-    return res.status(400).json({ message: "Invalid status" });
-  }
-
-  try {
-    const order = await Order.findByIdAndUpdate(req.params.orderId, { status }, { new: true });
-    if (!order) return res.status(404).json({ message: "Order not found" });
-
-    res.json({ message: "Order status updated", order });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
+router.put("/:orderId", async (req, res) => {
+    try {
+      const { status } = req.body;
+      const { orderId } = req.params;
+  
+      const order = await Order.findById(orderId);
+      if (!order) return res.status(404).json({ message: "Order not found" });
+  
+      order.status = status;
+      await order.save();
+  
+      res.json({ message: "Order status updated", order });
+    } catch (error) {
+      res.status(500).json({ message: "Error updating order status" });
+    }
+  });
 export default router;

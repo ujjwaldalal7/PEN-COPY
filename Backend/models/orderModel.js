@@ -5,15 +5,12 @@ const orderSchema = new mongoose.Schema({
   items: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-      quantity: { type: Number, required: true, min: 1 },
+      name: String,
+      price: Number,
+      quantity: Number,
     },
   ],
-  totalAmount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: ["Ordered", "In Transit", "Out for Delivery", "Delivered"],
-    default: "Ordered",
-  },
+  status: { type: String, default: "Ordered" },
   createdAt: { type: Date, default: Date.now },
 });
 

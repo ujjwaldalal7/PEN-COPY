@@ -20,8 +20,12 @@ const HeaderNavbar = () => {
           ) : (
             isLoggedIn && <li><a href="/userdashboard">DASHBOARD</a></li>
           )}
-          <li><a href="/contact">CONTACT US</a></li>
           <li><a href="/cart">CART</a></li>
+          {isAdmin ? (
+            <li><a href="/admin/orders">ORDERS</a></li>
+          ) : (
+            isLoggedIn && <li><a href="/orders">ORDERS</a></li>
+          )}
         </ul>
       </nav>
 

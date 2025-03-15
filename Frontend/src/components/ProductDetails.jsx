@@ -5,6 +5,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -22,6 +23,38 @@ const ProductDetails = () => {
 
     fetchProduct();
   }, [id]);
+
+  const addToCart = async () => {
+    if (!product) return;
+    
+    try {
+      // Get logged-in user ID
+      const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+        headers: { Authorization: token },
+      });
+      const userData = await userRes.json();
+      if (!userData._id) throw new Error("User not found");
+
+      // Add item to cart in database
+      const res = await fetch("http://localhost:5500/api/v1/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData._id,
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to add product to cart");
+      alert("Product added to cart!");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    }
+  };
 
   if (loading)
     return <div className="flex justify-center items-center h-screen text-lg">Loading...</div>;
@@ -47,7 +80,10 @@ const ProductDetails = () => {
           <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
           <p className="text-2xl font-bold text-blue-600">₹{product.price}</p>
 
-          <button className="mt-6 w-full md:w-1/2 px-6 py-3 bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-all">
+          <button
+            onClick={addToCart}
+            className="mt-6 w-full md:w-1/2 px-6 py-3 bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-all"
+          >
             Add to Cart
           </button>
         </div>

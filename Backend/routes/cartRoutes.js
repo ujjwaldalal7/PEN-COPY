@@ -3,53 +3,67 @@ import Cart from "../models/cartModel.js";
 
 const router = express.Router();
 
-// Get user's cart
-router.get("/:userId", async (req, res) => {
-  try {
-    const cart = await Cart.findOne({ userId: req.params.userId }).populate("items.productId");
-    res.json(cart || { items: [] });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 // Add item to cart
-router.post("/add", async (req, res) => {
-  const { userId, productId, quantity } = req.body;
+router.post("/", async (req, res) => {
   try {
+    const { userId, productId, name, price } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
       cart = new Cart({ userId, items: [] });
     }
 
-    const existingItem = cart.items.find((item) => item.productId.toString() === productId);
-    if (existingItem) {
-      existingItem.quantity += quantity;
+    const itemIndex = cart.items.findIndex((item) => item.productId.toString() === productId);
+
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += 1;
     } else {
-      cart.items.push({ productId, quantity });
+      cart.items.push({ productId, name, price, quantity: 1 });
     }
 
     await cart.save();
     res.json(cart);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// Remove item from cart
-router.delete("/remove/:userId/:productId", async (req, res) => {
+// Get user's cart
+router.get("/:userId", async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.params.userId });
+    const { userId } = req.params;
 
-    if (!cart) return res.status(404).json({ message: "Cart not found" });
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
 
-    cart.items = cart.items.filter((item) => item.productId.toString() !== req.params.productId);
-    await cart.save();
+    const cart = await Cart.findOne({ userId }).populate("items.productId");
+    if (!cart) return res.json({ items: [] });
 
     res.json(cart);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Clear cart after placing an order
+router.delete("/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    await Cart.updateOne({ userId }, { $set: { items: [] } }); // Clears only items, not entire cart
+    res.json({ message: "Cart cleared" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

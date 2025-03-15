@@ -10,6 +10,8 @@ import CreateProduct from "./pages/Admin/CreateProducts";
 import Unauthorized from "./pages/Admin/Unauthorized";
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
+import ManageOrders from "./pages/Admin/manageorders";
 function App() {
   const { isLoggedIn, isAdmin, isAuthChecked } = useAuth();
 
@@ -28,7 +30,10 @@ function App() {
         path="/userdashboard"
         element={isLoggedIn ? <UserDashboard /> : <div>Please Login</div>}
       />
-
+      <Route
+        path="/orders"
+        element={isLoggedIn ? <Orders /> : <div>Please Login</div>}
+      />
       {/* Admin Protected Routes */}
       <Route
         path="/admin/dashboard"
@@ -42,7 +47,10 @@ function App() {
         path="/admin/products/create"
         element={isAdmin ? <CreateProduct /> : <div>Unauthorized Access</div>}
       />
-
+      <Route
+        path="/admin/orders/"
+        element={isAdmin ? <ManageOrders/> : <div>Unauthorized Access</div>}
+      />
       <Route path="/admin/unauthorized" element={<Unauthorized />} />
     </Routes>
   );
