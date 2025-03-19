@@ -46,7 +46,6 @@ const Cart = () => {
         },
         body: JSON.stringify({ userId: userData._id, items: cart }),
       });
-
       if (!res.ok) throw new Error("Failed to place order");
 
       // Clear cart after successful order placement
