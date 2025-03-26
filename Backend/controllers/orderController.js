@@ -62,7 +62,8 @@ export const placeOrder = async (req, res) => {
     session.endSession();
 
     console.log("Order placed successfully!");
-    res.status(201).json({ message: "Order placed successfully!", order });
+    res.status(201).json({ message: "Order placed successfully!", order, 
+      orderId: order._id  });
 
   } catch (error) {
     await session.abortTransaction();
@@ -114,5 +115,22 @@ export const updateOrderStatus = async (req, res) => {
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: "Error updating order status" });
+  }
+};
+export const getOrderById = async (req, res) => {
+  try {
+      const order = await Order.findById(req.params.orderId);
+
+      if (!order) {
+          return res.status(404).json({ message: "Order not found" });
+      }
+
+      // Calculate total amount
+      const totalAmount = order.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+      res.json({ ...order.toObject(), totalAmount });  // Include totalAmount in response
+  } catch (error) {
+      console.error("Error fetching order:", error);
+      res.status(500).json({ message: "Server error" });
   }
 };

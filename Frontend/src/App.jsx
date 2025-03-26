@@ -12,6 +12,8 @@ import ProductDetails from "./components/ProductDetails";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import ManageOrders from "./pages/Admin/manageorders";
+import OrderConfirmation from "./components/OrderConfirmation";
+
 function App() {
   const { isLoggedIn, isAdmin, isAuthChecked } = useAuth();
 
@@ -25,6 +27,7 @@ function App() {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
       {/* Protected Routes */}
       <Route
         path="/userdashboard"

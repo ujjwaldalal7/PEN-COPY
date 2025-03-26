@@ -1,5 +1,5 @@
 import express from "express";
-import { placeOrder, getUserOrders, getAllOrders, updateOrderStatus } from "../controllers/orderController.js"; // Ensure correct spelling
+import { placeOrder, getUserOrders, getAllOrders, updateOrderStatus, getOrderById } from "../controllers/orderController.js"; // Ensure correct spelling
 
 const router = express.Router();
 
@@ -14,5 +14,6 @@ router.get("/:userId", getUserOrders);
 
 // Update order status
 router.put("/:orderId", updateOrderStatus);
+router.get("/order/:orderId", getOrderById);
 
 export default router;

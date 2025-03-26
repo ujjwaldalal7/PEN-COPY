@@ -1,27 +1,37 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HeaderNavbar from "../components/Header_navbar";
 import Footer from "../components/Footer";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate(); // For navigation after order placement
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const userRes = await fetch(`http://localhost:5500/api/v1/auth/me`, {
+        const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
           headers: { Authorization: token },
         });
 
         const userData = await userRes.json();
         if (!userData._id) throw new Error("User not found");
 
-        const cartRes = await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`);
+        const cartRes = await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
+          headers: { Authorization: token },
+        });
+
+        if (!cartRes.ok) throw new Error("Failed to load cart");
+
         const cartData = await cartRes.json();
+        console.log("Fetched Cart Data:", cartData); // Debugging
         setCart(cartData.items || []);
       } catch (error) {
         console.error("Error fetching cart:", error);
+        setError("Failed to load cart. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -35,30 +45,44 @@ const Cart = () => {
       const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
         headers: { Authorization: token },
       });
-
+  
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
-
+      
       const res = await fetch(`http://localhost:5500/api/v1/orders/${userData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token,
         },
         body: JSON.stringify({ userId: userData._id, items: cart }),
       });
       if (!res.ok) throw new Error("Failed to place order");
 
-      // Clear cart after successful order placement
+      const orderData = await res.json();
+      if (!orderData.orderId) throw new Error("Order ID missing from response"); // 🛑 Debugging
+      
+      console.log("Order placed successfully! Order ID:", orderData._id); // ✅ Debugging
+  
+      // Clear cart after successful order
       await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
         method: "DELETE",
+        headers: { Authorization: token },
       });
-
-      setCart([]); // Clear local state
+  
+      setCart([]);
       alert("Order placed successfully!");
+  
+      // ✅ Navigate with the correct orderId
+      navigate(`/order-confirmation/${orderData.orderId}`);
+  
     } catch (error) {
       console.error("Error placing order:", error);
+      alert("Failed to place order. Please try again.");
     }
   };
+  
+  
 
   if (loading)
     return (
@@ -72,11 +96,13 @@ const Cart = () => {
       <HeaderNavbar />
       <div className="p-4">
         <h1 className="text-xl font-bold">Your Cart</h1>
-        {cart.length > 0 ? (
+        {error ? (
+          <p className="text-red-500">{error}</p>
+        ) : cart.length > 0 ? (
           <>
             <ul>
-              {cart.map((item) => (
-                <li key={item.productId} className="border p-2 my-2">
+              {cart.map((item, index) => (
+                <li key={item.productId || index} className="border p-2 my-2">
                   {item.name} - ₹{item.price} (x{item.quantity})
                 </li>
               ))}
