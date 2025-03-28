@@ -8,39 +8,44 @@ const HeaderNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="bg-black text-gray-400">
-      <div className="flex items-center justify-between h-24 px-6 md:px-10">
+    <header className="bg-black text-gray-400 shadow-md">
+      <div className="flex items-center justify-between h-20 px-6 md:px-10">
         {/* Logo */}
         <div>
-          <img src={logo} alt="Logo" className="h-16 md:h-24" />
+          <img src={logo} alt="Logo" className="h-14 md:h-20" />
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          <a href="/home" className="hover:text-white">HOME</a>
+        <nav className="hidden md:flex space-x-8 text-lg font-medium mx-auto">
+          <a href="/home" className="hover:text-white transition duration-300">HOME</a>
           {isAdmin ? (
-            <a href="/admin/dashboard" className="hover:text-white">DASHBOARD</a>
+            <a href="/admin/dashboard" className="hover:text-white transition duration-300">DASHBOARD</a>
           ) : (
-            isLoggedIn && <a href="/userdashboard" className="hover:text-white">DASHBOARD</a>
+            isLoggedIn && <a href="/userdashboard" className="hover:text-white transition duration-300">DASHBOARD</a>
           )}
-          <a href="/cart" className="hover:text-white">CART</a>
+          <a href="/cart" className="hover:text-white transition duration-300">CART</a>
           {isAdmin ? (
-            <a href="/admin/orders" className="hover:text-white">ORDERS</a>
+            <a href="/admin/orders" className="hover:text-white transition duration-300">ORDERS</a>
           ) : (
-            isLoggedIn && <a href="/orders" className="hover:text-white">ORDERS</a>
+            isLoggedIn && <a href="/orders" className="hover:text-white transition duration-300">ORDERS</a>
           )}
         </nav>
 
         {/* Auth Buttons */}
-        <div className="hidden md:block">
+        <div className="hidden md:block w-72">
           {isLoggedIn ? (
-            <button className="bg-gray-500 text-white w-28 h-9 rounded-xl" onClick={logout}>
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition duration-300"
+              onClick={logout}
+            >
               LogOut
             </button>
           ) : (
-            <button className="bg-gray-500 text-white w-28 h-9 rounded-xl">
-              <a href="/login">LogIn</a>
-            </button>
+            <a href="/login">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition duration-300">
+                LogIn
+              </button>
+            </a>
           )}
         </div>
 
@@ -50,34 +55,30 @@ const HeaderNavbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
-      {menuOpen && (
-        <div className="md:hidden bg-black p-6 space-y-4 text-center">
-          <a href="/home" className="block hover:text-white">HOME</a>
+      {/* Mobile Navigation - Always Centered */}
+      <div
+        className={`md:hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center transform ${
+          menuOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300`}
+      >
+        <button className="absolute top-6 right-6 text-white text-3xl" onClick={() => setMenuOpen(false)}>
+          <FiX />
+        </button>
+        <div className="flex flex-col items-center space-y-6 text-xl">
+          <a href="/home" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>HOME</a>
           {isAdmin ? (
-            <a href="/admin/dashboard" className="block hover:text-white">DASHBOARD</a>
+            <a href="/admin/dashboard" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>DASHBOARD</a>
           ) : (
-            isLoggedIn && <a href="/userdashboard" className="block hover:text-white">DASHBOARD</a>
+            isLoggedIn && <a href="/userdashboard" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>DASHBOARD</a>
           )}
-          <a href="/cart" className="block hover:text-white">CART</a>
+          <a href="/cart" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>CART</a>
           {isAdmin ? (
-            <a href="/admin/orders" className="block hover:text-white">ORDERS</a>
+            <a href="/admin/orders" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>ORDERS</a>
           ) : (
-            isLoggedIn && <a href="/orders" className="block hover:text-white">ORDERS</a>
-          )}
-
-          {/* Mobile Auth Buttons */}
-          {isLoggedIn ? (
-            <button className="bg-gray-500 text-white w-full h-9 rounded-xl" onClick={logout}>
-              LogOut
-            </button>
-          ) : (
-            <button className="bg-gray-500 text-white w-full h-9 rounded-xl">
-              <a href="/login">LogIn</a>
-            </button>
+            isLoggedIn && <a href="/orders" className="text-white hover:text-gray-400" onClick={() => setMenuOpen(false)}>ORDERS</a>
           )}
         </div>
-      )}
+      </div>
     </header>
   );
 };
