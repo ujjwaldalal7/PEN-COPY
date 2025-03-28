@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../../context/auth";
 import { useNavigate } from "react-router-dom";
 import HeaderNavbar from "../../components/Header_navbar";
-import Footer from "../../components/footer";
+import Footer from "../../components/Footer";
 
 const Dashboard = () => {
   const { isAdmin } = useAuth();

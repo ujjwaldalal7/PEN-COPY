@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import toast from "react-hot-toast";
 const AdminProducts = () => {
   const [products, setProducts] = useState([]); // Ensure it starts as an empty array
   const [loading, setLoading] = useState(true);
@@ -38,14 +38,14 @@ const AdminProducts = () => {
       const data = await response.json();
   
       if (data.success) {
-        alert("Product deleted successfully!");
+        toast.success("Product deleted successfully!");
         setProducts(products.filter(product => product._id !== id)); // Update UI after deletion
       } else {
-        alert("Error deleting product: " + data.message);
+        toast.error("Error deleting product: " + data.message);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     }
   };
   

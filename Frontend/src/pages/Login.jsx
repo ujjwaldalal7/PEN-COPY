@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Header_navbar from '../components/Header_navbar';
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 import TextField from '../components/TextField';
 import { useAuth } from "../context/auth"
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
 
 const LoginForm = () => {
   const navigate = useNavigate();

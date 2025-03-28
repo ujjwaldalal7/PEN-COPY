@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderNavbar from "../components/Header_navbar";
 import Footer from "../components/Footer";
+import toast from "react-hot-toast"
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -60,9 +61,9 @@ const Cart = () => {
       if (!res.ok) throw new Error("Failed to place order");
 
       const orderData = await res.json();
-      if (!orderData.orderId) throw new Error("Order ID missing from response"); // 🛑 Debugging
+      if (!orderData.orderId) throw new Error("Order ID missing from response");
       
-      console.log("Order placed successfully! Order ID:", orderData._id); // ✅ Debugging
+      console.log("Order placed successfully! Order ID:", orderData._id); 
   
       // Clear cart after successful order
       await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
@@ -71,9 +72,8 @@ const Cart = () => {
       });
   
       setCart([]);
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
   
-      // ✅ Navigate with the correct orderId
       navigate(`/order-confirmation/${orderData.orderId}`);
   
     } catch (error) {

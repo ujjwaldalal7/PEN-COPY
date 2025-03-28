@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TextField from "../../components/TextField";
 import Header_navbar from "../../components/Header_navbar";
 import Footer from "../../components/Footer";
-
+import toast from "react-hot-toast";
 const CreateProduct = () => {
   const [product, setProduct] = useState({
     name: "",
@@ -32,14 +32,14 @@ const CreateProduct = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("Product created successfully!");
+        toast.success("Product created successfully!");
         navigate("/admin/products");
       } else {
-        alert("Error creating product: " + data.message);
+        toast.error("Error creating product: " + data.message);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     }
   };
 

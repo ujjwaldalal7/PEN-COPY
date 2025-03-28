@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import toast from "react-hot-toast";
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -50,7 +50,7 @@ const ProductDetails = () => {
       });
 
       if (!res.ok) throw new Error("Failed to add product to cart");
-      alert("Product added to cart!");
+      toast.success("Product added to cart!");
     } catch (err) {
       console.error("Error adding to cart:", err);
     }

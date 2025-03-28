@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Header_navbar from "../components/Header_navbar";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 import TextField from "../components/TextField"; 
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 
 const Register = () => {
   const navigate=useNavigate();
@@ -26,7 +26,7 @@ const Register = () => {
     // Password validation
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
-      alert("Password must be at least 8 characters, include one uppercase, one symbol, and one digit.");
+      toast.error("Password must be at least 8 characters, include one uppercase, one symbol, and one digit.");
       return;
     }
   
@@ -40,13 +40,13 @@ const Register = () => {
       const result = await response.json(); // Parse JSON response
   
       if (result.success) {
-        alert("Registration successful! Now LogIn");
+        toast.success("Registration successful! Now LogIn");
         navigate('/login');
       } else {
-        alert(result.message); // Show message from the backend
+        toast.error(result.message); // Show message from the backend
       }
     } catch (error) {
-      alert("Error: " + error.message);
+      toast.error("Error: " + error.message);
     }
   };
 
