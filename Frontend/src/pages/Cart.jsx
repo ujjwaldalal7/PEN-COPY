@@ -46,10 +46,10 @@ const Cart = () => {
       const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
         headers: { Authorization: token },
       });
-  
+
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
-      
+
       const res = await fetch(`http://localhost:5500/api/v1/orders/${userData._id}`, {
         method: "POST",
         headers: {
@@ -62,27 +62,48 @@ const Cart = () => {
 
       const orderData = await res.json();
       if (!orderData.orderId) throw new Error("Order ID missing from response");
-      
-      console.log("Order placed successfully! Order ID:", orderData._id); 
-  
+
+      console.log("Order placed successfully! Order ID:", orderData._id);
+
       // Clear cart after successful order
       await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
         method: "DELETE",
         headers: { Authorization: token },
       });
-  
+
       setCart([]);
       toast.success("Order placed successfully!");
-  
+
       navigate(`/order-confirmation/${orderData.orderId}`);
-  
+
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
     }
   };
-  
-  
+  const clearCart = async () => {
+    try {
+      const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+        headers: { Authorization: token },
+      });
+
+      const userData = await userRes.json();
+      if (!userData._id) throw new Error("User not found");
+      await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
+        method: "DELETE",
+        headers: { Authorization: token },
+      });
+
+      setCart([]);
+      toast.success("Cart cleared");
+
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Failed to place order. Please try again.");
+    }
+  };
+
+
 
   if (loading)
     return (
@@ -107,12 +128,21 @@ const Cart = () => {
                 </li>
               ))}
             </ul>
-            <button
-              onClick={placeOrder}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Place Order
-            </button>
+            <div className="flex items-center justify-center w-full gap-4">
+              <button
+                onClick={placeOrder}
+                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Place Order
+              </button>
+              <button
+                onClick={clearCart}
+                className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Clear Cart
+              </button>
+            </div>
+
           </>
         ) : (
           <p>Your cart is empty.</p>
