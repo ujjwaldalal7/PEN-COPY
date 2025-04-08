@@ -12,7 +12,7 @@ dotenv.config(); // Load environment variables
 connectDB();
 
 const app = express();
-const port = process.env.PORT || 5500;
+const port = process.env.PORT;
 
 // Middleware
 app.use(express.json());

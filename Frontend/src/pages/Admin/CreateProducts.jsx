@@ -4,6 +4,7 @@ import TextField from "../../components/TextField";
 import Header_navbar from "../../components/Header_navbar";
 import Footer from "../../components/Footer";
 import toast from "react-hot-toast";
+import { api_url } from "../../context/config";
 const CreateProduct = () => {
   const [product, setProduct] = useState({
     name: "",
@@ -23,7 +24,7 @@ const CreateProduct = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5500/api/v1/products/create", {
+      const response = await fetch(`${api_url}/api/v1/products/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),

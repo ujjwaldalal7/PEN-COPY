@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { api_url } from "../../context/config";
+
 const AdminProducts = () => {
   const [products, setProducts] = useState([]); // Ensure it starts as an empty array
   const [loading, setLoading] = useState(true);
@@ -8,7 +10,7 @@ const AdminProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5500/api/v1/products");
+        const response = await fetch(`${api_url}/api/v1/products`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -29,7 +31,7 @@ const AdminProducts = () => {
   
     try {
       const token=localStorage.getItem("token")
-      const response = await fetch(`http://localhost:5500/api/v1/products/delete/${id}`, {
+      const response = await fetch(`${api_url}/api/v1/products/delete/${id}`, {
         method: "DELETE",
         headers: {  Authorization: `${token}`,
         "Content-Type": "application/json" },

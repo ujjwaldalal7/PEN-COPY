@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderNavbar from "../components/Header_navbar";
 import Footer from "../components/Footer";
 import toast from "react-hot-toast"
+import { api_url } from "../context/config";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -14,14 +15,14 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+        const userRes = await fetch(`${api_url}/api/v1/auth/me`, {
           headers: { Authorization: token },
         });
 
         const userData = await userRes.json();
         if (!userData._id) throw new Error("User not found");
 
-        const cartRes = await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
+        const cartRes = await fetch(`${api_url}/api/v1/cart/${userData._id}`, {
           headers: { Authorization: token },
         });
 
@@ -43,14 +44,14 @@ const Cart = () => {
 
   const placeOrder = async () => {
     try {
-      const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+      const userRes = await fetch(`${api_url}/api/v1/auth/me`, {
         headers: { Authorization: token },
       });
 
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
 
-      const res = await fetch(`http://localhost:5500/api/v1/orders/${userData._id}`, {
+      const res = await fetch(`${api_url}/api/v1/orders/${userData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +67,7 @@ const Cart = () => {
       console.log("Order placed successfully! Order ID:", orderData._id);
 
       // Clear cart after successful order
-      await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
+      await fetch(`${api_url}/api/v1/cart/${userData._id}`, {
         method: "DELETE",
         headers: { Authorization: token },
       });
@@ -83,13 +84,13 @@ const Cart = () => {
   };
   const clearCart = async () => {
     try {
-      const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+      const userRes = await fetch(`${api_url}/api/v1/auth/me`, {
         headers: { Authorization: token },
       });
 
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
-      await fetch(`http://localhost:5500/api/v1/cart/${userData._id}`, {
+      await fetch(`api_url/api/v1/cart/${userData._id}`, {
         method: "DELETE",
         headers: { Authorization: token },
       });

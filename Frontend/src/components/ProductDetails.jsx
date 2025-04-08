@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/auth";
+import HeaderNavbar from "./Header_navbar";
+import Footer from "./Footer";
 const ProductDetails = () => {
   const { id } = useParams();
+  const {isLoggedIn}=useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
-
+  const navigate=useNavigate();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -62,6 +66,8 @@ const ProductDetails = () => {
     return <div className="flex justify-center items-center h-screen text-lg">Product not found</div>;
 
   return (
+    <>
+    <HeaderNavbar/>
     <div className="max-w-6xl mx-auto px-6 py-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         
@@ -79,16 +85,25 @@ const ProductDetails = () => {
           <h1 className="text-4xl font-extrabold text-gray-900">{product.name}</h1>
           <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
           <p className="text-2xl font-bold text-blue-600">₹{product.price}</p>
-
-          <button
+          {isLoggedIn?
+          (<button
             onClick={addToCart}
             className="mt-6 w-full md:w-1/2 px-6 py-3 bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-all"
           >
             Add to Cart
-          </button>
+          </button>):
+          (<button
+          onClick={navigate('/login')}
+          className="mt-6 w-full md:w-1/2 px-6 py-3 bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-all"
+        >
+          Add to Cart
+        </button>)
+        }
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

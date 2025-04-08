@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import TextField from "../components/TextField"; 
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { api_url } from "../context/config";
 
 const Register = () => {
   const navigate=useNavigate();
@@ -31,7 +32,7 @@ const Register = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5500/api/v1/auth/register", {
+      const response = await fetch(`${api_url}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import HeaderNavbar from "../components/Header_navbar";
 import { useAuth } from "../context/auth";
 import ProductCard from "../components/ProductCard";
-
+import { api_url } from "../context/config";
 const Home = () => {
   const { isLoggedIn } = useAuth();
   const [products, setProducts] = useState([]);
@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5500/api/v1/products");
+        const response = await fetch(`${api_url}/api/v1/products`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

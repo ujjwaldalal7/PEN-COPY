@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import HeaderNavbar from "../components/Header_navbar";
 import Footer from "../components/Footer";
-
+import { api_url } from "../context/config";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -10,13 +10,13 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+        const userRes = await fetch(`${api_url}/api/v1/auth/me`, {
           headers: { Authorization: token },
         });
         const userData = await userRes.json();
         if (!userData._id) throw new Error("User not found");
 
-        const ordersRes = await fetch(`http://localhost:5500/api/v1/orders/${userData._id}`);
+        const ordersRes = await fetch(`${api_url}/api/v1/orders/${userData._id}`);
         const ordersData = await ordersRes.json();
         setOrders(ordersData || []);
       } catch (error) {

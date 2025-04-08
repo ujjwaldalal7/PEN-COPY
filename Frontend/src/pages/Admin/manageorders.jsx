@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import HeaderNavbar from "../../components/Header_navbar";
 import Footer from "../../components/Footer";
+import { api_url } from "../../context/config";
 const manageOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:5500/api/v1/orders/all");
+        const res = await fetch(`${api_url}/api/v1/orders/all`);
         const data = await res.json();
         setOrders(data);
       } catch (error) {
@@ -20,7 +21,7 @@ const manageOrders = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await fetch(`http://localhost:5500/api/v1/orders/${orderId}`, {
+      await fetch(`${api_url}/api/v1/orders/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
