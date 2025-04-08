@@ -29,7 +29,6 @@ const Cart = () => {
         if (!cartRes.ok) throw new Error("Failed to load cart");
 
         const cartData = await cartRes.json();
-        console.log("Fetched Cart Data:", cartData); // Debugging
         setCart(cartData.items || []);
       } catch (error) {
         console.error("Error fetching cart:", error);
@@ -90,7 +89,7 @@ const Cart = () => {
 
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
-      await fetch(`api_url/api/v1/cart/${userData._id}`, {
+      await fetch(`${api_url}/api/v1/cart/${userData._id}`, {
         method: "DELETE",
         headers: { Authorization: token },
       });

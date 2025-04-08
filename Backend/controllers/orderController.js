@@ -6,7 +6,7 @@ import Cart from "../models/cartModel.js";
 export const placeOrder = async (req, res) => {
   const session = await mongoose.startSession(); // Start transaction
   session.startTransaction();
-  try {
+  try { 
     const { userId, items } = req.body;
     console.log("Received Order Request:", { userId, items });
     console.log("hi")
