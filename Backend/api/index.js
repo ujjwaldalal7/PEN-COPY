@@ -1,12 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/db.js';
+import connectDB from '../config/db.js';
 import morgan from 'morgan';
-import authRoutes from './routes/authRoute.js';
+import authRoutes from '../routes/authRoute.js';
 import cors from 'cors'
-import ProductRoutes from './routes/ProductRoutes.js '
-import cartRoutes from './routes/cartRoutes.js'
-import orderRoutes from './routes/orderRoutes.js'
+import ProductRoutes from '../routes/ProductRoutes.js'
+import cartRoutes from '../routes/cartRoutes.js'
+import orderRoutes from '../routes/orderRoutes.js'
 
 dotenv.config(); // Load environment variables
 connectDB();
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend's URL
+  origin: 'https://pen-copy.vercel.app', // Your frontend's URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true, // Allow cookies if needed
 }));
@@ -46,3 +46,5 @@ app.get('/title', function (req, res) {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+export default app

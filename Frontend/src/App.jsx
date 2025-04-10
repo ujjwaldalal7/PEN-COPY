@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import UserDashboard from "./pages/Userdashboard"; // Fix: Ensure case matches file
+import UserDashboard from "./pages/UserDashboard";
 import Register from "./pages/Register";
 import LoginForm from "./pages/Login";
 import { useAuth } from "./context/auth";

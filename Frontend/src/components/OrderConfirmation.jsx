@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { api_url } from "../context/config";
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
@@ -19,7 +20,7 @@ const OrderConfirmation = () => {
       try {
         console.log("Fetching order details for orderId:", orderId);
 
-        const response = await fetch(`http://localhost:5500/api/v1/orders/order/${orderId}`, {
+        const response = await fetch(`${api_url}/v1/orders/order/${orderId}`, {
           headers: {
             "Authorization": localStorage.getItem("token"),
             "Content-Type": "application/json",
@@ -46,7 +47,7 @@ const OrderConfirmation = () => {
       try {
         console.log("Fetching user details...");
 
-        const response = await fetch("http://localhost:5500/api/v1/auth/me", {
+        const response = await fetch(`${api_url}/api/v1/auth/me`, {
           method: "GET",
           headers: {
             Authorization: localStorage.getItem("token"),

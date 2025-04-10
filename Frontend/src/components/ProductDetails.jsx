@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/auth";
 import HeaderNavbar from "./Header_navbar";
 import Footer from "./Footer";
+import { api_url } from "../context/config";
+
 const ProductDetails = () => {
   const { id } = useParams();
   const {isLoggedIn}=useAuth();
@@ -14,7 +16,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:5500/api/v1/products/${id}`);
+        const res = await fetch(`${api_url}/api/v1/products/${id}`);
         if (!res.ok) throw new Error("Failed to fetch product");
         const data = await res.json();
         setProduct(data);
@@ -33,14 +35,14 @@ const ProductDetails = () => {
     
     try {
       // Get logged-in user ID
-      const userRes = await fetch("http://localhost:5500/api/v1/auth/me", {
+      const userRes = await fetch(`${api_url}/api/v1/auth/me`, {
         headers: { Authorization: token },
       });
       const userData = await userRes.json();
       if (!userData._id) throw new Error("User not found");
 
       // Add item to cart in database
-      const res = await fetch("http://localhost:5500/api/v1/cart", {
+      const res = await fetch(`${api_url}/api/v1/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

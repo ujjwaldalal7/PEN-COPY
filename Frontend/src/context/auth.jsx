@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { api_url } from "./config";
 const AuthContext = React.createContext({
   isLoggedIn: false,
   isAdmin: false,
@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:5500/api/v1/auth/me", {
+      fetch(`${api_url}/api/v1/auth/me`, {
         method: "GET",
         headers: {
           Authorization: `${token}`,
@@ -54,7 +54,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const loginHandler = async ({ email, password }) => {
     try {
-      const response = await fetch("http://localhost:5500/api/v1/auth/login", {
+      const response = await fetch(`${api_url}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
