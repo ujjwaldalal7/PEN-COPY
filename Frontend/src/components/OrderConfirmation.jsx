@@ -20,7 +20,7 @@ const OrderConfirmation = () => {
       try {
         console.log("Fetching order details for orderId:", orderId);
 
-        const response = await fetch(`${api_url}/v1/orders/order/${orderId}`, {
+        const response = await fetch(`${api_url}/api/v1/orders/order/${orderId}`, {
           headers: {
             "Authorization": localStorage.getItem("token"),
             "Content-Type": "application/json",

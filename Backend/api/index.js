@@ -8,7 +8,7 @@ import ProductRoutes from '../routes/ProductRoutes.js'
 import cartRoutes from '../routes/cartRoutes.js'
 import orderRoutes from '../routes/orderRoutes.js'
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 connectDB();
 
 const app = express();
@@ -19,9 +19,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use(cors({
-  origin: 'https://pen-copy.vercel.app', // Your frontend's URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // Allow cookies if needed
+  origin: 'https://pen-copy.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
 }));
 
 
@@ -30,19 +30,14 @@ app.use('/api/v1/products',ProductRoutes);
 app.use('/api/v1/cart',cartRoutes);
 app.use('/api/v1/orders',orderRoutes);
 
-// Root route
 app.get('/', function (req, res) {
   res.send('Hello World, Server is started');
 });
 
-// Auth routes
-
-// Additional route
 app.get('/title', function (req, res) {
   res.send('Hello World, Title');
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
